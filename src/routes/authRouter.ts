@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-const router = new Router({prefix : '/api' });
+const router = new Router();
 import Controller from '../controllers/user.controller';
 const userController = new Controller();
 import {validateRegistration} from "../utils/auth.utils";
