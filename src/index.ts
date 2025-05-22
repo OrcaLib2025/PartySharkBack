@@ -12,22 +12,29 @@ import mainRouter from './routes';
 const PORT = config.port || 3003;
 const app = new Koa();
 
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    })
+);
+
 app.use(error({
     format: (err: any) => ({
-      success: false,
-      status: err.status || 500,
-      message: err.message || 'Internal server error',
-      ...(err.errors && { errors: err.errors }),
-      ...(process.env.NODE_ENV === 'development' && { 
-        stack: err.stack,
-        originalError: err.originalError 
-      })
+        success: false,
+        status: err.status || 500,
+        message: err.message || 'Internal server error',
+        ...(err.errors && { errors: err.errors }),
+        ...(process.env.NODE_ENV === 'development' && {
+            stack: err.stack,
+            originalError: err.originalError
+        })
     }),
-    
-    postFormat: (e, obj) => process.env.NODE_ENV === 'production' 
-      ? { ...obj, status: obj.status, message: obj.message }
-      : obj
-  }));
+
+    postFormat: (e, obj) => process.env.NODE_ENV === 'production'
+        ? { ...obj, status: obj.status, message: obj.message }
+        : obj
+}));
 
 app.use(koaBody())
 app.use(async (ctx, next) => {

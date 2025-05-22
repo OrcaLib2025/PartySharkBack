@@ -1,44 +1,46 @@
 import { Schema, Types, model } from 'mongoose';
 
-export interface IParty {
+export interface IParty extends Document {
+    id?: string;
     img?: string;
     title: string;
     description?: string;
-    members?: Types.ObjectId[];
+    members?: string[];
     geoPoint: number[];
     isActive: boolean;
     createdAt: Date;
-    endDate: Date;
-    timeSlots: {
-        start: Date;
-        end: Date;
-    }[];
+    endDate: Date | string;
+    timeSlots: { start: Date | string; end: Date | string }[];
     maxMembers: number;
     membersCount: number;
     tags: string[];
     isPaid: boolean;
+    author?: string;
 }
 
 const partySchema = new Schema<IParty>({
-    img: { type: String },
+    img: { type: String, required: false },
     title: { type: String, required: true },
-    description: { type: String },
-    members: [{ type: Types.ObjectId, ref: 'UserModel' }],
-    geoPoint: { type: [Number], required: true },
-    isActive: { type: Boolean, default: true },
-    createdAt: { type: Date, default: Date.now },
-    endDate: { type: Date, required: true },
-    timeSlots: [{
-        start: { type: Date, required: true },
-        end: { type: Date, required: true }
-    }],
+    description: { type: String, required: false },
+    members: [{ type: String, ref: 'User', required: false }],
+    geoPoint: { type: [Number], required: true, default: [0, 0] },
+    isActive: { type: Boolean, required: true, default: true },
+    createdAt: { type: Date, required: true, default: Date.now },
+    endDate: { type: String, required: true },
+    timeSlots: [
+        {
+            start: { type: String, required: true },
+            end: { type: String, required: true },
+        },
+    ],
     maxMembers: { type: Number, required: true },
-    membersCount: { type: Number, default: 0 },
-    tags: [{ type: String }],
-    isPaid: { type: Boolean, default: false }
+    membersCount: { type: Number, required: true, default: 0 },
+    tags: { type: [String], required: true, default: [] },
+    isPaid: { type: Boolean, required: true, default: false },
+    author: { type: String, required: false },
 });
 
-partySchema.pre('save', function(next) {
+partySchema.pre('save', function (next) {
     this.membersCount = this.members?.length || 0;
     next();
 });

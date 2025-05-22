@@ -5,13 +5,16 @@ export class PartyService {
     public async createParty(partyData: Omit<IParty, 'createdAt' | 'membersCount'>): Promise<IParty> {
         if (partyData.timeSlots && partyData.timeSlots.length > 0) {
             for (const slot of partyData.timeSlots) {
-                if (slot.start >= slot.end) {
+                const start = new Date(slot.start);
+                const end = new Date(slot.end);
+                if (start >= end) {
                     throw new Error('Время начала должно быть раньше времени окончания');
                 }
             }
         }
 
-        if (partyData.endDate && new Date(partyData.endDate) < new Date()) {
+        const endDate = new Date(partyData.endDate);
+        if (endDate < new Date()) {
             throw new Error('Дата окончания не может быть в прошлом');
         }
 
