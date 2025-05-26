@@ -60,4 +60,29 @@ export class PartyController {
             };
         }
     };
+
+    public getAllParties = async (ctx: Context): Promise<void> => {
+        try {
+            const { active } = ctx.query;
+
+            let filter: { isActive?: boolean } = {};
+            if (active !== undefined) {
+                filter.isActive = active === 'true';
+            }
+
+            const parties = await this.partyService.getAllParties(filter);
+
+            ctx.status = 200;
+            ctx.body = {
+                success: true,
+                data: parties,
+            };
+        } catch (error: any) {
+            ctx.status = 500;
+            ctx.body = {
+                success: false,
+                message: error.message || 'Ошибка при получении списка вечеринок',
+            };
+        }
+    };
 }

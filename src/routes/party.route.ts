@@ -6,6 +6,7 @@ const partyController = new PartyController();
 const partyRouter = new Router();
 
 partyRouter.post('/', partyController.createParty);
-partyRouter.get('/:id', partyController.getParty);
+partyRouter.get('party-by-id/:id', partyController.getParty);
+partyRouter.get('/all-parties', partyController.getAllParties);
 
 export default partyRouter;

@@ -2,6 +2,7 @@ import { Schema, Types, model } from 'mongoose';
 
 export interface IParty extends Document {
     id?: string;
+    uid?: string;
     img?: string;
     title: string;
     description?: string;
@@ -19,6 +20,7 @@ export interface IParty extends Document {
 }
 
 const partySchema = new Schema<IParty>({
+    uid: { type: String, required: true },
     img: { type: String, required: false },
     title: { type: String, required: true },
     description: { type: String, required: false },

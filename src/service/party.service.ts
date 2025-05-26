@@ -34,4 +34,13 @@ export class PartyService {
     public async getPartyById(id: string): Promise<IParty | null> {
         return PartyModel.findById(id).populate('members');
     }
+
+    public async getAllParties(filter: { isActive?: boolean } = {}): Promise<IParty[]> {
+        const query: any = {};
+        if (filter.isActive !== undefined) {
+            query.isActive = filter.isActive;
+        }
+
+        return await PartyModel.find(query);
+    }
 }
