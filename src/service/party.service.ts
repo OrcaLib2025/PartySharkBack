@@ -32,7 +32,7 @@ export class PartyService {
     }
 
     public async getPartyById(id: string): Promise<IParty | null> {
-        return PartyModel.findById(id).populate('members');
+        return PartyModel.findById(id);
     }
 
     public async getAllParties(filter: { isActive?: boolean } = {}): Promise<IParty[]> {
