@@ -6,7 +6,7 @@ export interface IParty extends Document {
     img?: string;
     title: string;
     description?: string;
-    members?: string[];
+    members?: { name: string; id: string }[];
     geoPoint: number[];
     isActive: boolean;
     createdAt: Date;
@@ -24,7 +24,12 @@ const partySchema = new Schema<IParty>({
     img: { type: String, required: false },
     title: { type: String, required: true },
     description: { type: String, required: false },
-    members: [{ type: String, ref: 'User', required: false }],
+    members: [
+        {
+            name: { type: String, required: true },
+            id: { type: String, required: true },
+        },
+    ],
     geoPoint: { type: [Number], required: true, default: [0, 0] },
     isActive: { type: Boolean, required: true, default: true },
     createdAt: { type: Date, required: true, default: Date.now },

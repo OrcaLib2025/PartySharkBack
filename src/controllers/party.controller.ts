@@ -85,4 +85,46 @@ export class PartyController {
             };
         }
     };
+
+    public addMemberToParty = async (ctx: Context): Promise<void> => {
+        try {
+            const partyId = ctx.params.id;
+            const memberData: { name: string; id: string } = ctx.request.body;
+
+            const party = await this.partyService.getPartyById(partyId);
+            if (!party) {
+                ctx.status = 404;
+                ctx.body = { success: false, message: 'Вечеринка не найдена' };
+                return;
+            }
+
+            if (party.membersCount >= party.maxMembers) {
+                ctx.status = 400;
+                ctx.body = { success: false, message: 'Достигнуто максимальное количество участников' };
+                return;
+            }
+
+            const isAlreadyMember = party.members?.some(m => m.id === memberData.id);
+            if (isAlreadyMember) {
+                ctx.status = 400;
+                ctx.body = { success: false, message: 'Пользователь уже участвует в вечеринке' };
+                return;
+            }
+
+            const updatedParty = await this.partyService.addMemberToParty(partyId, memberData);
+
+            ctx.status = 200;
+            ctx.body = {
+                success: true,
+                data: updatedParty,
+                message: 'Пользователь успешно добавлен',
+            };
+        } catch (error: any) {
+            ctx.status = 500;
+            ctx.body = {
+                success: false,
+                message: error.message || 'Ошибка при добавлении участника',
+            };
+        }
+    };
 }

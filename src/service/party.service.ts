@@ -31,6 +31,16 @@ export class PartyService {
         return await newParty.save();
     }
 
+    public async addMemberToParty(partyId: string, member: { name: string; id: string }): Promise<IParty | null> {
+        return PartyModel.findByIdAndUpdate(
+            partyId,
+            {
+                $push: { members: member },
+            },
+            { new: true },
+        ).exec();
+    }
+
     public async getPartyById(id: string): Promise<IParty | null> {
         return PartyModel.findById(id);
     }
