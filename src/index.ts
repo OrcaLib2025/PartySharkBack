@@ -14,7 +14,7 @@ const app = new Koa();
 
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: 'http://79.141.73.245',
         credentials: true,
     })
 );
