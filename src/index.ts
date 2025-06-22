@@ -13,10 +13,7 @@ const PORT = config.port || 3003;
 const app = new Koa();
 
 app.use(
-    cors({
-        origin: 'http://79.141.73.245',
-        credentials: true,
-    })
+    cors()
 );
 
 app.use(error({
@@ -50,7 +47,6 @@ app.use(async (ctx, next) => {
 });
 app.use(authRouter.routes());
 app.use(mainRouter.routes());
-app.use(cors());
 
 router.get('/api', (ctx) => {
     ctx.body = 'Login page';
